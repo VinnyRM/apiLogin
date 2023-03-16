@@ -1,0 +1,77 @@
+cria-se primeiro a pasta e dentro dela você dá o comando:
+npm init -y
+
+após isso terá que instalar as dependências que são(e outras que você poderá utilizar mysql...):
+npm install express nodemon cors
+
+após isso cria-se a pasta raiz da api e dentro dela o arquivo que irá iniciar todo o processo
+já no arquivo package.json adicione na parte de scripts a seguinte linha:
+"dev": "nodemon src/server.js(arquivo que você nomeou)"
+
+no arquivo raiz cria-se a constante da dependência express:
+const express = require('express');
+
+e uma outra constante que irá requisitar a função:
+const app = express();
+
+então você usa a constante que requisitou a função e usa ela criando o json:
+app.use(express.json());
+
+após isso cria uma rota para ver se está funcionando:
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
+
+e então faz a aplicação ser ouvida:
+app.listen(3000, () => {
+    console.log('Aberto na porta 3000');
+});
+
+depois na pasta raiz do projeto cria-se o arquivo das rotas, onde todas irão ficar. importa o express primeiramente e qualquer outra dependênci que irá usar:
+const express = require('express');
+
+cria-se o objeto que irá receber o express:
+const routes = express.Router();
+
+e então cria-se a rota com o crud:
+routes.post('/login', (req, res) => {
+  res.send('Login endpoint');
+});
+
+e no fim exportar as rotas com:
+module.esports = routes;
+
+volta-se ao arquivo inicial e importa a constante routes:
+const routes = require('./routes');
+
+em seguida informa que a api irá usar a constante routes:
+app.use(routes);
+
+a partir de agora você poderá modificar o arquivo routes para pedir ao usuário para dar as informações modificando o código para a linha abaixo:
+routes.post('/login', (req, res) => {
+    const { email, password } = req.body;
+    res.send(email);
+  });
+
+como não está utilizando banco de dados crie um usuário fixo para validar o sistema, no arquivo routes digite o seguinte código:
+const users = [{
+  id: 1,
+  name: 'ethan',
+  email: 'ethan@com.br',
+  password: '123456'
+}];
+
+na rota do /login faça a verificação com a linha:
+const user = users.find(user => user.email === email && user.password === password);
+if (user){
+  return res.status(200).json(user);
+}
+return res.status(401).json({ message: 'Credenciais inválidas. '});
+
+agora crie a pasta frontend no terminal e vá até ela, após isso digite o comando:
+npx create-react-app apilogin(nome da aplicação sem letras maiuscúlas)
+
+depois instale a biblioteca do axios:
+npm i axios
+
+no arquivo de app.js apague tudo dentro de header e o app.css pode apagar completamente para futura edição
